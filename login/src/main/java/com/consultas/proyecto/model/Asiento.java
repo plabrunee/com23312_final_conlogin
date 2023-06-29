@@ -19,11 +19,12 @@ public class Asiento {
 
     private Boolean esta_libre;
 
+
     private Long id_avion;
 
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "id_avion", nullable = false)
+    @JoinColumn(name = "id_avion", nullable = false, insertable=false, updatable = false)
     private Avion avion;
 
 

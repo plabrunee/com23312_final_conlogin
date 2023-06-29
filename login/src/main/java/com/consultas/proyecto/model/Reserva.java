@@ -22,13 +22,13 @@ public class Reserva {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "id_MetodoDePago", nullable = false)
-    private MetodoDePago metodoDePAgo;
+    private MetodoDePago metodoDePago;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "id_vuelo", nullable = false)
+    @JoinColumn(name = "id_vuelo", nullable = false, updatable = false, insertable = false)
     private Vuelo vuelo;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "id_usuario", nullable = false)
+    @JoinColumn(name = "id_usuario", nullable = false, updatable = false, insertable = false)
     private Usuario usuario;
 }

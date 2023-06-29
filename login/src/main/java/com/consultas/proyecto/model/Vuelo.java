@@ -31,7 +31,7 @@ public class Vuelo {
     private List<Reserva> reserva;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "id_avion", nullable = false)
+    @JoinColumn(name = "id_avion", nullable = false, updatable = false, insertable = false)
     private Avion avion;
 
 

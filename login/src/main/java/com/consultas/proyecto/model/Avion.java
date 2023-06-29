@@ -28,7 +28,7 @@ public class Avion {
 
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "id_aerolinea", nullable = false)
+    @JoinColumn(name = "id_aerolinea", nullable = false, insertable = false, updatable = false)
     private Aerolinea aerolinea;
 
 
