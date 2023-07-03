@@ -45,7 +45,7 @@ public class Usuario implements java.io.Serializable{
 	@Column(nullable = false, columnDefinition = "boolean default true")
 	private boolean activo;
 
-	@OneToMany(mappedBy = "id_usuario", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
 	private List<Reserva> reserva;
 
 	@Override

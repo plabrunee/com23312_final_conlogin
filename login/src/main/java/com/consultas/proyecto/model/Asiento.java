@@ -1,5 +1,6 @@
 package com.consultas.proyecto.model;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,8 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "asiento")
-@Getter
-@Setter
+@Data
 public class Asiento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,12 +19,8 @@ public class Asiento {
 
     private Boolean esta_libre;
 
-
-    private Long id_avion;
-
-
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "id_avion", nullable = false, insertable=false, updatable = false)
+    @JoinColumn(name = "id_avion")
     private Avion avion;
 
 

@@ -1,7 +1,7 @@
 package com.consultas.proyecto.config;
 
-import com.consultas.proyecto.listener.filter.JwtAuthenticationEntryPoint;
-import com.consultas.proyecto.listener.filter.JwtRequestFilter;
+import com.consultas.proyecto.filter.JwtAuthenticationEntryPoint;
+import com.consultas.proyecto.filter.JwtRequestFilter;
 import com.consultas.proyecto.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -75,6 +75,8 @@ public class WebSecurityConfig {
 				.authorizeRequests().antMatchers("/api/public/**").permitAll()
 				.antMatchers(HttpMethod.POST,"/api/public/register").permitAll()
 				.antMatchers(HttpMethod.GET,"/buscar/nombre/**").permitAll()
+				.antMatchers(HttpMethod.GET,"/aviones/**").permitAll()
+				.antMatchers("/aviones/**").permitAll()
 				.antMatchers("/api/usuarios/**").permitAll()
 				.antMatchers("/api/perfiles/**").hasAuthority("ROLE_ADMIN")
 				.anyRequest().authenticated();

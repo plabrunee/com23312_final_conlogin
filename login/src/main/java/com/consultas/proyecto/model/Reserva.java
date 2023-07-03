@@ -14,10 +14,6 @@ public class Reserva {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_reserva;
 
-    private Long id_vuelo;
-    private Long id_metodo_de_pago;
-    private Long id_usuario;
-
     private Double precio;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
@@ -29,6 +25,6 @@ public class Reserva {
     private Vuelo vuelo;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "id_usuario", nullable = false, updatable = false, insertable = false)
+    @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 }

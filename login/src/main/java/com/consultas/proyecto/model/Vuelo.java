@@ -11,7 +11,6 @@ import java.util.List;
 @Entity
 @Table(name = "vuelo")
 @Data
-
 public class Vuelo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,13 +24,11 @@ public class Vuelo {
 
     private Boolean tiene_conexion;
 
-    private Long id_avion;
-
-    @OneToMany(mappedBy = "id_vuelo", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "vuelo", cascade = CascadeType.ALL)
     private List<Reserva> reserva;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "id_avion", nullable = false, updatable = false, insertable = false)
+    @JoinColumn(name = "id_avion")
     private Avion avion;
 
 
