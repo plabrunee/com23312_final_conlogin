@@ -16,11 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 @RestController
 @RequestMapping(LoginController.AUTH_RESOURCE)
@@ -43,15 +39,15 @@ public class LoginController {
 		try {
 
 			Authentication authentication = authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(credenciales.getNombre(), credenciales.getPassword()));
+					new UsernamePasswordAuthenticationToken(credenciales.getEmail(), credenciales.getPassword()));
 
 			User user = (User) authentication.getPrincipal();
 
-			final UserDetails userDetails = usuarioService.loadUserByUsername(credenciales.getNombre());
+			final UserDetails userDetails = usuarioService.loadUserByUsername(credenciales.getEmail());
 
 			final String token = jwtTokenUtil.generateToken(userDetails);
 			
-			UsuarioDTO usuario = usuarioService.loadUserDTO(credenciales.getNombre());
+			UsuarioDTO usuario = usuarioService.loadUserDTO(credenciales.getEmail());
 
 			return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).body(usuario);
 		} catch (DisabledException e) {
@@ -68,6 +64,8 @@ public class LoginController {
 			UsuarioDTO usuario = new UsuarioDTO();
 			usuario.setMail(credencialesRegistro.getMail());
 			usuario.setNombre(credencialesRegistro.getNombre());
+			usuario.setApellido(credencialesRegistro.getApellido());
+			usuario.setTelefono(credencialesRegistro.getTelefono());
 			usuario.setPassword(credencialesRegistro.getPassword());
 			return ResponseEntity.ok(usuarioService.create(usuario));
 		} catch (Exception e) {

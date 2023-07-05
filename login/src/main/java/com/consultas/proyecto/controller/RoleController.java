@@ -1,10 +1,5 @@
 package com.consultas.proyecto.controller;
 
-import java.net.URI;
-import java.util.List;
-
-
-
 import com.consultas.proyecto.dto.RoleDTO;
 import com.consultas.proyecto.model.Role;
 import com.consultas.proyecto.service.RoleService;
@@ -13,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
+import java.util.List;
 
 @CrossOrigin("*")
 @RestController
@@ -39,13 +36,13 @@ public class RoleController {
 	
 	@PostMapping
     public ResponseEntity<Role> add(@RequestBody @Valid RoleDTO perfilDTO) {
-        if(perfilService.findByNombrePerfil(perfilDTO.getNombrePerfil()).isPresent()) {
+        if(perfilService.findByNombreRol(perfilDTO.getNombreRol()).isPresent()) {
         	return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
 		Role perfil = perfilService.create(perfilDTO);
         //TODO quitar el hardcode!!!
-        return ResponseEntity.created(URI.create("http://localhost:8080/api/perfiles/"+perfil.getId())).body(perfil);               
+        return ResponseEntity.created(URI.create("http://localhost:8080/api/perfiles/"+perfil.getIdRol())).body(perfil);
     }
 	
 	@PutMapping("/{id}")

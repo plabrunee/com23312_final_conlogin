@@ -13,22 +13,18 @@ public class UsuarioDTO {
 	private Long id;
 	
 	private String nombre;
-	
+
+	private String apellido;
+
+
 	private String password;
 	
 	private String mail;
 
+	private String telefono;
+
+
 	private boolean activo;
-
-	private Set<String> perfiles;
-
-	public Set<String> getPerfiles() {
-		return perfiles;
-	}
-
-	public void setPerfiles(Set<String> perfiles) {
-		this.perfiles = perfiles;
-	}
-
+	private Set<String> roles;
 
 }

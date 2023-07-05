@@ -1,4 +1,4 @@
-package com.consultas.proyecto.filter;
+package com.consultas.proyecto.listener.filter;
 
 import com.consultas.proyecto.service.UsuarioService;
 import com.consultas.proyecto.utils.JwtTokenUtil;
@@ -35,6 +35,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		String username = null;
 		String jwtToken = null;
 		// JWT Token tiene la siguiente forma "Bearer token". Se quita la palabra Bearer para obtener solo el token.
+
 		if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
 			jwtToken = requestTokenHeader.substring(7);
 			try {
@@ -63,6 +64,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 			}
 		}
+
 		chain.doFilter(request, response);
 	}
 }

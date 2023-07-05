@@ -1,35 +1,49 @@
 package com.consultas.proyecto.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "vuelo")
+@Table(name = "Vuelo")
 @Data
+@NoArgsConstructor
 public class Vuelo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_vuelo;
+    @Column(name = "id_vuelo")
+    private Long idVuelo;
 
-    private Date fecha_de_partida;
-    private Date fecha_de_llegada;
+    @Column(name = "fecha_de_partida", nullable = false)
+    private Date fechaDePartida;
 
+    @Column(name = "fecha_de_llegada", nullable = false)
+    private Date fechaDeLlegada;
+
+    @Column(name = "origen", nullable = false)
     private String origen;
+
+    @Column(name = "destino", nullable = false)
     private String destino;
 
-    private Boolean tiene_conexion;
+    @Column(name = "tiene_conexion", nullable = false)
+    private Boolean tieneConexion;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "vuelo", cascade = CascadeType.ALL)
-    private List<Reserva> reserva;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "id_avion")
-    private Avion avion;
+    private List<AsientoVuelo> asientosVuelo;
 
 
+
+    public Vuelo(Date fechaDePartida, Date fechaDeLlegada, String origen, String destino, Boolean tieneConexion) {
+        this.fechaDePartida = fechaDePartida;
+        this.fechaDeLlegada = fechaDeLlegada;
+        this.origen = origen;
+        this.destino = destino;
+        this.tieneConexion = tieneConexion;
+    }
 }

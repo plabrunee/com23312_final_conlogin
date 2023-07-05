@@ -1,7 +1,4 @@
 package com.consultas.proyecto.service;
-import java.util.*;
-
-import javax.validation.ValidationException;
 
 import com.consultas.proyecto.dto.UsuarioDTO;
 import com.consultas.proyecto.model.Role;
@@ -17,17 +14,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.ValidationException;
+import java.util.*;
+
 
 
 @Service
 public class UsuarioService implements UserDetailsService {
+
 	UsuarioRepository usuarioRepository;
-	RoleRepository perfilRepository;
+
+	RoleRepository roleRepository;
+
 	PasswordEncoder passwordEncoder;
-	public UsuarioService(UsuarioRepository usuarioRepository, RoleRepository perfilRepository,
+
+	public UsuarioService(UsuarioRepository usuarioRepository, RoleRepository roleRepository,
 			PasswordEncoder passwordEncoder) {
 		this.usuarioRepository = usuarioRepository;
-		this.perfilRepository = perfilRepository;
+		this.roleRepository = roleRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
 
@@ -45,19 +49,21 @@ public class UsuarioService implements UserDetailsService {
 
 	public Usuario create(UsuarioDTO usuarioDTO) throws ValidationException {
 		
-		if (usuarioRepository.findByNombre(usuarioDTO.getNombre()).isPresent()) {
-		      throw new ValidationException("El nombre de usuario ya existe!");
+		if (usuarioRepository.findByMail(usuarioDTO.getMail()).isPresent()) {
+		      throw new ValidationException("El mail de usuario ya existe!");
 		 }
 		
 		Usuario usuario = new Usuario();
 		usuario.setNombre(usuarioDTO.getNombre());
+		usuario.setApellido(usuarioDTO.getApellido());
+		usuario.setTelefono(usuarioDTO.getTelefono());
 		usuario.setMail(usuarioDTO.getMail());
 		usuario.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
 		usuario.setActivo(true);
 		Role perfilEmprendedor = crearPerfilSiNoExiste(Role.ROLE_USER);
 		Set<Role> perfilesUsuario = new HashSet<>();
 		perfilesUsuario.add(perfilEmprendedor);
-		usuario.setPerfiles(perfilesUsuario);
+		usuario.setRoles(perfilesUsuario);
 		return usuarioRepository.save(usuario);
 	}
 	
@@ -74,11 +80,11 @@ public class UsuarioService implements UserDetailsService {
 		usuario.setNombre(usuarioDTO.getNombre());
 		usuario.setMail(usuarioDTO.getMail());
 		Set<Role> perfilesUsuario = new HashSet<>();
-		for (String perfil : usuarioDTO.getPerfiles()) {
+		for (String perfil : usuarioDTO.getRoles()) {
 			Role perfilEmprendedor = crearPerfilSiNoExiste(perfil);
 			perfilesUsuario.add(perfilEmprendedor);
 		}		
-		usuario.setPerfiles(perfilesUsuario);
+		usuario.setRoles(perfilesUsuario);
 		if(usuarioDTO.getPassword() != null) {
 			//es porque cambiaron la contraseña
 			usuario.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
@@ -101,48 +107,48 @@ public class UsuarioService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<Usuario> userOptional = usuarioRepository.findByNombre(username);
+		Optional<Usuario> userOptional = usuarioRepository.findByMail(username);
 		if (userOptional.isEmpty())
 			throw new UsernameNotFoundException("User not found with username: " + username);
 
 		// Creo un usuario(de Spring) que se usará para autenticación y autorización
 		// Primero creo los objetos Authority a partir de los perfiles que tiene el
 		// usuario.
-		Set<Role> perfiles = userOptional.get().getPerfiles();
+		Set<Role> perfiles = userOptional.get().getRoles();
 		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		for (Role perfil : perfiles) {
-			authorities.add(new SimpleGrantedAuthority(perfil.getNombrePerfil()));
+			authorities.add(new SimpleGrantedAuthority(perfil.getNombreRol()));
 		}
-		return new User(userOptional.get().getNombre(), userOptional.get().getPassword(), authorities);
+		return new User(userOptional.get().getMail(), userOptional.get().getPassword(), authorities);
 	}
 	
 	@Transactional
 	Role crearPerfilSiNoExiste(String nombrePerfil) {
 		 
-		  Optional<Role> perfilOptional = perfilRepository.findByNombrePerfil(nombrePerfil);
+		  Optional<Role> perfilOptional = roleRepository.findByNombreRol(nombrePerfil);
 	        if (perfilOptional.isEmpty()) {
 				Role perfil = new Role();
-	            perfil.setNombrePerfil(nombrePerfil);
-	            perfilRepository.save(perfil);
+	            perfil.setNombreRol(nombrePerfil);
+	            roleRepository.save(perfil);
 	            return perfil;
 	        }
 	        return perfilOptional.get();
 	    }
 
-	public UsuarioDTO loadUserDTO(String nombre) {
-		Optional<Usuario> userOptional = usuarioRepository.findByNombre(nombre);
+	public UsuarioDTO loadUserDTO(String mail) {
+		Optional<Usuario> userOptional = usuarioRepository.findByMail(mail);
 		if (userOptional.isEmpty())
-			throw new UsernameNotFoundException("User not found with username: " + nombre);
+			throw new UsernameNotFoundException("User not found with username: " + mail);
 		
 		UsuarioDTO usuarioDTO = new UsuarioDTO();
-		usuarioDTO.setId(userOptional.get().getId());
+		usuarioDTO.setId(userOptional.get().getIdUsuario());
 		usuarioDTO.setNombre(userOptional.get().getNombre());
 		usuarioDTO.setMail(userOptional.get().getMail());
-		Set<String> perfiles = new HashSet<>();
-		for (Role perfil : userOptional.get().getPerfiles()) {
-			perfiles.add(perfil.getNombrePerfil());
+		Set<String> roles = new HashSet<>();
+		for (Role perfil : userOptional.get().getRoles()) {
+			roles.add(perfil.getNombreRol());
 		}
-		usuarioDTO.setPerfiles(perfiles);
+		usuarioDTO.setRoles(roles);
 		return usuarioDTO;
 	}
 }

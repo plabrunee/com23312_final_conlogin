@@ -1,22 +1,20 @@
 package com.consultas.proyecto.model;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name="usuarios")
+@Table(name="Usuarios")
 public class Usuario implements java.io.Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -24,35 +22,41 @@ public class Usuario implements java.io.Serializable{
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Column(name="id_usuario")
-	private Long id;
-	@Column(nullable = false )
+	private Long idUsuario;
+	@Column(name = "nombre", nullable = false )
 	private String nombre;
-	@Column(name="mail")
+
+	@Column(name = "apellido", nullable = false )
+	private String apellido;
+
+	@Column(name = "telefono", nullable = false )
+	private String telefono;
+	@Column(name="mail", nullable = false)
 	private String mail;
 
 	@JsonIgnore
-	@Column(nullable = false )
+	@Column(nullable = false)
 	private String password;
 
 	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "usuarios_perfiles",
-			joinColumns = @JoinColumn(name = "id_usuario"),
-			inverseJoinColumns = @JoinColumn(name = "id_perfil")
+			joinColumns = @JoinColumn(name = "fk_usuario"),
+			inverseJoinColumns = @JoinColumn(name = "fk_rol")
 			)
-	private Set<Role> perfiles= new HashSet<>();
+	private Set<Role> roles = new HashSet<>();
+
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+	private List<Reserva> reservas;
 	
 	@Column(nullable = false, columnDefinition = "boolean default true")
 	private boolean activo;
-
-	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-	private List<Reserva> reserva;
 
 	@Override
 	public String toString() {
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (idUsuario: ");
-		result.append(id);
+		result.append(idUsuario);
 		result.append(", nombre: ");
 		result.append(nombre);
 		result.append(", mail: ");

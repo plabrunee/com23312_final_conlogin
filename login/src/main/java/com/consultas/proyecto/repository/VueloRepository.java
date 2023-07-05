@@ -1,6 +1,5 @@
 package com.consultas.proyecto.repository;
 
-import com.consultas.proyecto.model.Asiento;
 import com.consultas.proyecto.model.Vuelo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

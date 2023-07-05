@@ -1,16 +1,23 @@
 package com.consultas.proyecto.dto;
 
-public class CredencialesRegistro extends Credenciales {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class CredencialesRegistro {
+
+	private String nombre;
+
+	private String apellido;
+
+	private String telefono;
 
 	private String mail;
-	
-	public CredencialesRegistro() {		
-	}
 
-	public String getMail() {
-		return mail;
-	}
+	private String password;
 
-	public void setMail(String mail) {
-		this.mail = mail;
-	}}
+
+}

@@ -3,10 +3,6 @@ package com.consultas.proyecto.service;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
 
 import javax.crypto.SecretKey;
 import java.util.Calendar;

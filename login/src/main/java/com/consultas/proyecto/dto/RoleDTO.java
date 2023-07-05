@@ -4,6 +4,7 @@ package com.consultas.proyecto.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import javax.validation.constraints.NotEmpty;
 
 @Getter
@@ -12,12 +13,12 @@ import javax.validation.constraints.NotEmpty;
 public class RoleDTO {
 
 	@NotEmpty
-	private String nombrePerfil;
-	public String getNombrePerfil() {
-		return nombrePerfil;
+	private String nombreRol;
+	public String getNombreRol() {
+		return nombreRol;
 	}
 
-	public void setNombrePerfil(String nombrePerfil) {
-		this.nombrePerfil = nombrePerfil;
+	public void setNombreRol(String nombreRol) {
+		this.nombreRol = nombreRol;
 	}
 }

@@ -1,9 +1,6 @@
 package com.consultas.proyecto.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,21 +8,20 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "aerolinea")
-@Data
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id_aerolinea")
+@Table(name = "Aerolinea")
+@Getter
+@Setter
 public class Aerolinea {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_aerolinea;
+    @Column(name="id_aerolinea")
+    private Long idAerolinea;
 
+    @Column(name="nombre", nullable = false)
     private String nombre;
 
-    @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(mappedBy = "id_avion", cascade = CascadeType.ALL)
-    private List<Avion> avion;
-
-
-
+    @OneToMany(mappedBy = "aerolinea", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<Avion> aviones;
 
 }
